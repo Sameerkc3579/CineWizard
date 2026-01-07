@@ -60,7 +60,7 @@ export function HeroBanner({ movies }: HeroBannerProps) {
                     </div>
 
                     {/* Content */}
-                    <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-center pt-20">
+                    <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-end md:justify-center pb-20 md:pb-0">
                         <motion.div
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -68,7 +68,7 @@ export function HeroBanner({ movies }: HeroBannerProps) {
                             className="max-w-2xl"
                         >
                             <h1
-                                className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70 tracking-tighter mb-4 drop-shadow-[0_5px_5px_rgba(0,0,0,0.5)]"
+                                className="hidden md:block text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70 tracking-tighter mb-4 drop-shadow-[0_5px_5px_rgba(0,0,0,0.5)]"
                                 style={{
                                     textShadow: "0px 4px 10px rgba(0,0,0,0.5), 0px 0px 30px rgba(217,70,239,0.3)",
                                     fontFamily: 'var(--font-playfair)',
@@ -78,7 +78,7 @@ export function HeroBanner({ movies }: HeroBannerProps) {
                                 {movie.title}
                             </h1>
 
-                            <p className="text-lg md:text-xl text-gray-300 line-clamp-3 mb-8 max-w-xl leading-relaxed">
+                            <p className="text-sm md:text-xl text-gray-300 line-clamp-2 md:line-clamp-3 mb-6 md:mb-8 max-w-xl leading-relaxed drop-shadow-md">
                                 {movie.overview}
                             </p>
 
