@@ -53,13 +53,14 @@ export function HeroBanner({ movies }: HeroBannerProps) {
                         {/* Mobile: Tumbler/Blurred Background (Fills entire screen for ambience) */}
                         <div
                             className="block md:hidden absolute inset-0 bg-cover bg-center opacity-30 blur-2xl scale-110 transition-all duration-1000"
-                            style={{ backgroundImage: `url(${tmdb.getImageUrl(movie.poster_path, 'w500')})` }}
+                            style={{ backgroundImage: `url(${tmdb.getImageUrl(movie.backdrop_path, 'w780')})` }}
                         />
 
-                        {/* Mobile: Main Poster (Restricted to Top 70% to reserve space for content below) */}
+                        {/* Mobile: Main Image (Backdrop - Contain + Top Align) */}
+                        {/* 16:9 Image on Mobile needs to be contained at the top */}
                         <div
-                            className="block md:hidden absolute top-4 left-0 right-0 h-[65%] bg-contain bg-center bg-no-repeat transition-all duration-1000 z-0"
-                            style={{ backgroundImage: `url(${tmdb.getImageUrl(movie.poster_path, 'w780')})` }}
+                            className="block md:hidden absolute top-0 left-0 right-0 bottom-0 bg-contain bg-top bg-no-repeat transition-all duration-1000 mt-20"
+                            style={{ backgroundImage: `url(${tmdb.getImageUrl(movie.backdrop_path, 'original')})` }}
                         />
 
                         {/* Gradients */}
