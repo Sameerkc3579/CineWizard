@@ -61,7 +61,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ g
       <NavBar />
       <HeroBanner movies={heroMovies} />
 
-      <section className="container mx-auto px-4 mt-[-100px] relative z-20">
+      <section className="container mx-auto px-4 -mt-10 md:-mt-24 relative z-20">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 px-2 gap-4">
           <h2 className="text-3xl md:text-5xl font-bold text-white drop-shadow-lg flex-shrink-0" style={{ fontFamily: 'var(--font-playfair)' }}>
             {sectionTitle} <span className="text-primary text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Now</span>
