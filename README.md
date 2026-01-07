@@ -68,9 +68,7 @@
 
 ## 📸 Screenshots
 
-| Home Page | Movie Details |
-|:---:|:---:|
-| *(Add screenshot here)* | *(Add screenshot here)* |
+![CineWizard Home Page](public/screenshots/home-preview.png)
 
 ---
 
