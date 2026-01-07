@@ -32,7 +32,7 @@ export function HeroBanner({ movies }: HeroBannerProps) {
     const movie = movies[index]
 
     return (
-        <div ref={ref} className="relative w-full h-[85vh] overflow-hidden bg-black">
+        <div ref={ref} className="relative w-full aspect-[2/3] md:aspect-auto md:h-[85vh] overflow-hidden bg-black">
             <AnimatePresence initial={false}>
                 <motion.div
                     key={movie.id}
