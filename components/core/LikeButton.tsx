@@ -11,10 +11,11 @@ import { createClient } from '@/lib/supabase/client'
 
 interface LikeButtonProps {
     movieId: number
+    movieTitle: string
     initialLiked?: boolean
 }
 
-export function LikeButton({ movieId, initialLiked = false }: LikeButtonProps) {
+export function LikeButton({ movieId, movieTitle, initialLiked = false }: LikeButtonProps) {
     const [liked, setLiked] = useState(initialLiked)
     const [loading, setLoading] = useState(false)
     const pathname = usePathname()
@@ -37,7 +38,7 @@ export function LikeButton({ movieId, initialLiked = false }: LikeButtonProps) {
         setLoading(true)
 
         try {
-            const result = await toggleLike(movieId, pathname)
+            const result = await toggleLike(movieId, movieTitle, 'like', pathname)
             if (result && 'error' in result && result.error) {
                 throw new Error(result.error)
             }

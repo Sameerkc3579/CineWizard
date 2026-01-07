@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { tmdb } from '@/lib/tmdb'
 import { MovieCard } from '@/components/core/MovieCard'
 import { NavBar } from '@/components/core/NavBar'
+import { LikeButton } from '@/components/core/LikeButton'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -43,7 +44,12 @@ export default async function Dashboard() {
                 {validMovies.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
                         {validMovies.map((m, i) => (
-                            <MovieCard key={m.id} movie={m} index={i} />
+                            <div key={m.id} className="relative group">
+                                <MovieCard movie={m} index={i} />
+                                <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <LikeButton movieId={m.id} movieTitle={m.title} initialLiked={true} />
+                                </div>
+                            </div>
                         ))}
                     </div>
                 ) : (

@@ -74,7 +74,7 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
 
                         <div className="flex gap-4">
                             <TrailerButton movieId={movie.id} movieTitle={movie.title} />
-                            <LikeButton movieId={movie.id} />
+                            <LikeButton movieId={movie.id} movieTitle={movie.title} />
                         </div>
                     </div>
                 </div>
