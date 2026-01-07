@@ -32,7 +32,7 @@ export function HeroBanner({ movies }: HeroBannerProps) {
     const movie = movies[index]
 
     return (
-        <div ref={ref} className="relative w-full aspect-[2/3] md:aspect-auto md:h-[85vh] overflow-hidden bg-black">
+        <div ref={ref} className="relative w-full h-[75vh] md:h-[85vh] overflow-hidden bg-black">
             <AnimatePresence initial={false}>
                 <motion.div
                     key={movie.id}
@@ -44,18 +44,25 @@ export function HeroBanner({ movies }: HeroBannerProps) {
                 >
                     {/* Parallax Background Container */}
                     <div className="absolute inset-0 w-full h-full">
-                        {/* Desktop Image (Backdrop) */}
+                        {/* Desktop Image (Backdrop - Cover) */}
                         <div
                             className="hidden md:block absolute inset-0 bg-cover bg-center transition-all duration-1000"
                             style={{ backgroundImage: `url(${tmdb.getImageUrl(movie.backdrop_path, 'original')})` }}
                         />
-                        {/* Mobile Image (Poster) - Better for portrait optimization */}
+
+                        {/* Mobile: Blurred Background Layer (Fills screen) */}
                         <div
-                            className="block md:hidden absolute inset-0 bg-cover bg-top transition-all duration-1000"
+                            className="block md:hidden absolute inset-0 bg-cover bg-center opacity-30 blur-xl scale-110 transition-all duration-1000"
+                            style={{ backgroundImage: `url(${tmdb.getImageUrl(movie.poster_path, 'w500')})` }}
+                        />
+
+                        {/* Mobile: Main Image (Contain - Shows FULL image) */}
+                        <div
+                            className="block md:hidden absolute inset-0 bg-contain bg-center bg-no-repeat transition-all duration-1000"
                             style={{ backgroundImage: `url(${tmdb.getImageUrl(movie.poster_path, 'w780')})` }}
                         />
 
-                        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
                         <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-transparent to-transparent" />
                     </div>
 
