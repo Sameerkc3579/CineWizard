@@ -89,7 +89,10 @@ export function NavBar() {
                         <div className="relative w-8 h-8 flex items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary group-hover:shadow-[0_0_15px_rgba(217,70,239,0.5)] transition-shadow">
                             <Sparkles className="w-5 h-5 text-white" />
                         </div>
-                        <span className="text-2xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400 group-hover:to-primary transition-all">
+                        <span 
+                            className="text-2xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400 group-hover:to-primary transition-all"
+                            style={{ fontFamily: 'var(--font-playfair)' }}
+                        >
                             CineWizard
                         </span>
                     </Link>
