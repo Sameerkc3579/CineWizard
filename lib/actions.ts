@@ -11,26 +11,51 @@ export async function toggleLike(movieId: number, pathname: string) {
     if (!user) return { error: 'Unauthorized' }
 
     // Check if exists
-    const { data: existing } = await supabase
+    const { data: existing, error: fetchError } = await supabase
         .from('user_interactions')
         .select('id')
         .eq('user_id', user.id)
         .eq('movie_id', movieId)
-        .eq('action', 'like')
-        .single()
+        .maybeSingle()
+
+    if (fetchError) {
+        console.error('Error fetching interaction:', fetchError)
+        return { error: fetchError.message }
+    }
 
     if (existing) {
         // Delete
-        await supabase.from('user_interactions').delete().eq('id', existing.id)
+        const { error: deleteError } = await supabase.from('user_interactions').delete().eq('id', existing.id)
+        if (deleteError) {
+            console.error('Error deleting interaction:', deleteError)
+            return { error: deleteError.message }
+        }
     } else {
         // Insert
-        await supabase.from('user_interactions').insert({
+        const { error: insertError } = await supabase.from('user_interactions').insert({
             user_id: user.id,
             movie_id: movieId,
-            action: 'like'
         })
+        if (insertError) {
+            console.error('Error inserting interaction:', insertError)
+            return { error: insertError.message }
+        }
     }
 
     revalidatePath(pathname)
+    revalidatePath('/dashboard')
     return { success: true }
+}
+
+import { tmdb } from '@/lib/tmdb'
+
+export async function getTrailer(movieId: number) {
+    try {
+        const videos = await tmdb.getMovieVideos(movieId)
+        const trailer = videos.results.find((v: any) => v.type === 'Trailer' && v.site === 'YouTube')
+        return { key: trailer ? trailer.key : (videos.results[0]?.key || null) }
+    } catch (e) {
+        console.error("Failed to fetch trailer", e)
+        return { key: null }
+    }
 }

@@ -107,6 +107,12 @@ export function NavBar() {
                                 className="pl-10 bg-white/5 border-white/10 focus:border-primary/50 focus:bg-black/80 rounded-full transition-all duration-300"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' && searchQuery.length > 0) {
+                                        window.location.href = `/?query=${encodeURIComponent(searchQuery)}`
+                                        setSearchResults([])
+                                    }
+                                }}
                             />
                         </div>
 

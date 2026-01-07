@@ -1,6 +1,7 @@
 import { tmdb } from '@/lib/tmdb'
 import { NavBar } from '@/components/core/NavBar'
 import { LikeButton } from '@/components/core/LikeButton'
+import { TrailerButton } from '@/components/core/TrailerButton'
 import { MovieCard } from '@/components/core/MovieCard'
 import { Badge } from '@/components/ui/badge'
 import Image from 'next/image'
@@ -72,6 +73,7 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
                         </div>
 
                         <div className="flex gap-4">
+                            <TrailerButton movieId={movie.id} movieTitle={movie.title} />
                             <LikeButton movieId={movie.id} />
                         </div>
                     </div>
@@ -92,17 +94,23 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
                         <h2 className="text-2xl font-bold text-white mb-4">Top Cast</h2>
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                             {credits?.cast.slice(0, 8).map(actor => (
-                                <div key={actor.id} className="bg-white/5 p-3 rounded-lg flex items-center gap-3">
-                                    <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-700 shrink-0">
+                                <a
+                                    key={actor.id}
+                                    href={`https://www.google.com/search?q=${encodeURIComponent(actor.name + " actor")}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="bg-white/5 p-3 rounded-lg flex items-center gap-3 hover:bg-white/10 transition-colors cursor-pointer group"
+                                >
+                                    <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-700 shrink-0 border border-transparent group-hover:border-primary transition-colors">
                                         {actor.profile_path ? (
                                             <Image src={tmdb.getImageUrl(actor.profile_path, 'w300')} alt={actor.name} fill className="object-cover" />
                                         ) : <div className="w-full h-full flex items-center justify-center text-xs">?</div>}
                                     </div>
                                     <div>
-                                        <p className="text-white font-medium text-sm line-clamp-1">{actor.name}</p>
+                                        <p className="text-white font-medium text-sm line-clamp-1 group-hover:text-primary transition-colors">{actor.name}</p>
                                         <p className="text-gray-400 text-xs line-clamp-1">{actor.character}</p>
                                     </div>
-                                </div>
+                                </a>
                             ))}
                         </div>
                     </section>

@@ -37,10 +37,14 @@ export function LikeButton({ movieId, initialLiked = false }: LikeButtonProps) {
         setLoading(true)
 
         try {
-            await toggleLike(movieId, pathname)
-        } catch (error) {
+            const result = await toggleLike(movieId, pathname)
+            if (result && 'error' in result && result.error) {
+                throw new Error(result.error)
+            }
+        } catch (error: any) {
             setLiked(!liked) // Revert
             console.error(error)
+            alert("Error: " + error.message)
         } finally {
             setLoading(false)
         }

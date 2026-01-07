@@ -4,27 +4,31 @@ import { tmdb } from '@/lib/tmdb'
 import { MovieCard } from '@/components/core/MovieCard'
 import { NavBar } from '@/components/core/NavBar'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function Dashboard() {
     const supabase = await createClient()
 
     // Verify Auth
     const { data: { user } } = await supabase.auth.getUser()
 
-    // if (!user) {
-    //   redirect('/login')
-    // }
+    if (!user) {
+        redirect('/')
+    }
 
-    // Fetch liked movies from Supabase table 'user_interactions'
-    // const { data: interactions } = await supabase.from('user_interactions').select('movie_id').eq('user_id', user.id).eq('action', 'like')
+    // Fetch liked movies from Supabase
+    const { data: interactions } = await supabase
+        .from('user_interactions')
+        .select('movie_id')
+        .eq('user_id', user.id)
 
-    // Mock Liked Movies for Demo
-    const movieIds = [299534, 157336, 27205, 155] // Endgame, Interstellar, Inception, Dark Knight
+    const movieIds = interactions?.map(i => i.movie_id) || []
 
     const movies = await Promise.all(
         movieIds.map(id => tmdb.getMovieDetails(id).catch(e => null))
     )
 
-    // @ts-ignore
     const validMovies = movies.filter(Boolean) as any[]
 
     return (
