@@ -1,13 +1,14 @@
 'use client'
 
 import { Movie } from '@/types/tmdb'
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { tmdb } from '@/lib/tmdb'
 import { TrailerButton } from '@/components/core/TrailerButton'
 import { Button } from '@/components/ui/button'
 import { Info } from 'lucide-react'
 import Link from 'next/link'
 import { useRef, useState, useEffect } from 'react'
+import Image from 'next/image'
 
 interface HeroBannerProps {
     movies: Movie[]
@@ -15,25 +16,24 @@ interface HeroBannerProps {
 
 export function HeroBanner({ movies }: HeroBannerProps) {
     const ref = useRef<HTMLDivElement>(null)
-    const { scrollY } = useScroll()
-    const y = useTransform(scrollY, [0, 500], [0, 200])
-    const opacity = useTransform(scrollY, [0, 400], [1, 0])
     const [index, setIndex] = useState(0)
 
-    // Auto-rotate
+    // Auto-rotate the hero movie every 8 seconds
     useEffect(() => {
         const timer = setInterval(() => {
             setIndex((prev) => (prev + 1) % movies.length)
-        }, 4000)
+        }, 8000)
         return () => clearInterval(timer)
     }, [movies.length])
 
+    // Safety check if no movies are passed
     if (!movies || movies.length === 0) return null
+
     const movie = movies[index]
 
     return (
-        <div ref={ref} className="relative w-full h-[75vh] md:h-[85vh] overflow-hidden bg-black">
-            <AnimatePresence initial={false}>
+        <div ref={ref} className="relative w-full h-[80vh] md:h-[85vh] overflow-hidden bg-black">
+            <AnimatePresence initial={false} mode='wait'>
                 <motion.div
                     key={movie.id}
                     initial={{ opacity: 0, x: "100%" }}
@@ -42,82 +42,72 @@ export function HeroBanner({ movies }: HeroBannerProps) {
                     transition={{ duration: 0.8, ease: "easeInOut" }}
                     className="absolute inset-0 w-full h-full"
                 >
-                    {/* Parallax Background Container */}
-                    <div className="absolute inset-0 w-full h-full">
-                        {/* Desktop Image (Backdrop - Cover) */}
-                        <div
-                            className="hidden md:block absolute inset-0 bg-cover bg-center transition-all duration-1000"
-                            style={{ backgroundImage: `url(${tmdb.getImageUrl(movie.backdrop_path, 'original')})` }}
+                    src={tmdb.getImageUrl(movie.poster_path, 'original')}
+                    alt={movie.title}
+                    fill
+                    className="object-cover object-center"
+                    priority
                         />
+                    {/* Gradient specifically for Mobile (Bottom to Top fade for text readability) */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-transparent" />
+                </div>
 
-                        {/* Mobile: Blurred Background Layer (Fills screen) */}
-                        <div
-                            className="block md:hidden absolute inset-0 bg-cover bg-center opacity-30 blur-xl scale-110 transition-all duration-1000"
-                            style={{ backgroundImage: `url(${tmdb.getImageUrl(movie.poster_path, 'w500')})` }}
-                        />
-
-                        {/* Mobile: Main Image (Contain - Shows FULL image) */}
-                        <div
-                            className="block md:hidden absolute inset-0 bg-contain bg-center bg-no-repeat transition-all duration-1000"
-                            style={{ backgroundImage: `url(${tmdb.getImageUrl(movie.poster_path, 'w780')})` }}
-                        />
-
-                        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
-                        <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-transparent to-transparent" />
-                    </div>
-
-                    {/* Content */}
-                    <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-end md:justify-center pb-20 md:pb-0">
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.3 }}
-                            className="max-w-2xl"
+                {/* --- CONTENT LAYER --- */}
+                <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-end md:justify-center pb-24 md:pb-0">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                        className="max-w-2xl"
+                    >
+                        {/* Movie Title */}
+                        <h1
+                            className="text-4xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70 tracking-tighter mb-4"
+                            style={{
+                                textShadow: "0px 4px 10px rgba(0,0,0,0.5)",
+                                fontFamily: 'var(--font-playfair)', // Ensure this font exists in your global CSS
+                            }}
                         >
-                            <h1
-                                className="hidden md:block text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70 tracking-tighter mb-4 drop-shadow-[0_5px_5px_rgba(0,0,0,0.5)]"
-                                style={{
-                                    textShadow: "0px 4px 10px rgba(0,0,0,0.5), 0px 0px 30px rgba(217,70,239,0.3)",
-                                    fontFamily: 'var(--font-playfair)',
-                                    letterSpacing: '-0.02em' // Tighter for elegant serif display
-                                }}
-                            >
-                                {movie.title}
-                            </h1>
+                            {movie.title}
+                        </h1>
 
-                            <p className="text-sm md:text-xl text-gray-300 line-clamp-2 md:line-clamp-3 mb-6 md:mb-8 max-w-xl leading-relaxed drop-shadow-md">
-                                {movie.overview}
-                            </p>
+                        {/* Overview Text */}
+                        <p className="text-sm md:text-xl text-gray-300 line-clamp-3 mb-6 md:mb-8 max-w-xl leading-relaxed drop-shadow-md">
+                            {movie.overview}
+                        </p>
 
-                            <div className="flex flex-wrap gap-4">
-                                <TrailerButton
-                                    movieId={movie.id}
-                                    movieTitle={movie.title}
-                                    variant="hero"
-                                />
+                        {/* Action Buttons */}
+                        <div className="flex flex-wrap gap-4">
+                            <TrailerButton
+                                movieId={movie.id}
+                                movieTitle={movie.title}
+                                variant="hero"
+                            />
 
-                                <Link href={`/movie/${movie.id}`}>
-                                    <Button size="lg" variant="outline" className="rounded-full border-white/20 hover:bg-white/10 backdrop-blur-sm text-white text-md font-bold px-8">
-                                        <Info className="w-5 h-5 mr-2" />
-                                        More Info
-                                    </Button>
-                                </Link>
-                            </div>
-                        </motion.div>
-                    </div>
-                </motion.div>
-            </AnimatePresence>
+                            <Link href={`/movie/${movie.id}`}>
+                                <Button size="lg" variant="outline" className="rounded-full border-white/20 hover:bg-white/10 backdrop-blur-sm text-white text-md font-bold px-8 h-12 md:h-14">
+                                    <Info className="w-5 h-5 mr-2" />
+                                    More Info
+                                </Button>
+                            </Link>
+                        </div>
+                    </motion.div>
+                </div>
+            </motion.div>
+        </AnimatePresence>
 
-            {/* Indicators */}
-            <div className="absolute bottom-8 right-8 z-20 flex gap-2">
-                {movies.map((_, i) => (
-                    <button
-                        key={i}
-                        onClick={() => setIndex(i)}
-                        className={`w-2 h-2 rounded-full transition-all duration-300 ${i === index ? 'w-8 bg-primary' : 'bg-white/50 hover:bg-white'}`}
-                    />
-                ))}
-            </div>
-        </div>
+            {/* Pagination Dots (Bottom Right) */ }
+    <div className="absolute bottom-8 right-8 z-20 flex gap-2">
+        {movies.map((_, i) => (
+            <button
+                key={i}
+                onClick={() => setIndex(i)}
+                className={`h-1.5 rounded-full transition-all duration-300 ${i === index ? 'w-8 bg-primary' : 'w-2 bg-white/30 hover:bg-white'}`}
+                aria-label={`Go to slide ${i + 1}`}
+            />
+        ))}
+    </div>
+        </div >
     )
 }
