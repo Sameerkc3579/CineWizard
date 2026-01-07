@@ -30,7 +30,6 @@ export function HeroBanner({ movies }: HeroBannerProps) {
 
     if (!movies || movies.length === 0) return null
     const movie = movies[index]
-    const imageUrl = tmdb.getImageUrl(movie.backdrop_path, 'original')
 
     return (
         <div ref={ref} className="relative w-full h-[85vh] overflow-hidden bg-black">
@@ -45,12 +44,19 @@ export function HeroBanner({ movies }: HeroBannerProps) {
                 >
                     {/* Parallax Background Container */}
                     <div className="absolute inset-0 w-full h-full">
+                        {/* Desktop Image (Backdrop) */}
                         <div
-                            className="absolute inset-0 bg-cover bg-center transition-all duration-1000"
-                            style={{ backgroundImage: `url(${imageUrl})` }}
+                            className="hidden md:block absolute inset-0 bg-cover bg-center transition-all duration-1000"
+                            style={{ backgroundImage: `url(${tmdb.getImageUrl(movie.backdrop_path, 'original')})` }}
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
-                        <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-transparent" />
+                        {/* Mobile Image (Poster) - Better for portrait optimization */}
+                        <div
+                            className="block md:hidden absolute inset-0 bg-cover bg-top transition-all duration-1000"
+                            style={{ backgroundImage: `url(${tmdb.getImageUrl(movie.poster_path, 'w780')})` }}
+                        />
+
+                        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-transparent to-transparent" />
                     </div>
 
                     {/* Content */}
