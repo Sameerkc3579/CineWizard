@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { createClient } from '@/lib/supabase/server'
 import { GenreSelectionModal } from '@/components/onboarding/GenreSelectionModal'
+import { LiveChat } from '@/components/LiveChat'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -53,6 +54,7 @@ export default async function RootLayout({
       >
         {children}
         {showOnboarding && user && <GenreSelectionModal isOpen={true} userId={user.id} />}
+        <LiveChat user={user} />
       </body>
     </html>
   );

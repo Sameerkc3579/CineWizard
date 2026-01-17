@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "server": "node backend/server.js",
+    "server:dev": "nodemon backend/server.js"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.11",
@@ -17,11 +19,16 @@
     "@supabase/supabase-js": "^2.90.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cors": "^2.8.5",
+    "express": "^5.2.1",
     "framer-motion": "^12.24.10",
     "lucide-react": "^0.562.0",
     "next": "16.1.1",
+    "nodemon": "^3.1.11",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3",
     "tailwind-merge": "^3.4.0",
     "zustand": "^5.0.9"
   },
